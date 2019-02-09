@@ -6,6 +6,8 @@ Created on Sun Feb  3 20:16:40 2019
 """
 import sys
 import numpy as np
+import matplotlib.pyplot as plt
+
 
 def analizar_data(file):
 
@@ -19,12 +21,16 @@ def leer_pizza(filename):
         line=f.readline()
         R,C,L,H=line.split()
         pizza=f.readlines()
-    return R,C,L,H,pizza
+        pi = np.array([list(map(lambda item: 1 if item == 'T' else 0, row.strip())) for row in pizza[0:]])
+    return R,C,L,H,pizza,pi
 
 if __name__=='__main__':
     b=analizar_data("data/a_example.in")
     print(b)
-    R,C,L,H,pizza=leer_pizza("data/a_example.in")
+    R,C,L,H,pizza,pi=leer_pizza("data/a_example.in")
     print(R,C,L,H)
     print(pizza)
-    
+    print(pi)
+    fig,ax=plt.subplots()
+    ax.imshow(pi)
+    ax.set_title(f'a_example.in shape is {pi.shape}, max. score {pi.size}\nmin. ingredients is {L}, max. pizza slice is {H}');
