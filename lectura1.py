@@ -90,8 +90,12 @@ def cortar(R,C,L,H,array):
         else:
             f=1
     print(shapes)
+    return shapes
 
-    
+def greedy_cortes(shapes,pizza,index):
+    cortes=[]
+    for lines in index:
+        
 
 if __name__=='__main__':
     b=analizar_data("data/a_example.in")
