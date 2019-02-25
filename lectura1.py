@@ -32,7 +32,7 @@ def contar_ingredientes(array):
     for line in array:
         count_ing[0]+=np.sum(1-line)
         count_ing[1]+=np.sum(line)
-        print(count_ing)
+        #print(count_ing)
     return count_ing
 
 def calcular_pizza(M,T,array):
@@ -63,12 +63,14 @@ def calcular_pizza(M,T,array):
                             val_array[i+elem[0]][j+elem[1]]=max(val_array[i+elem[0]][j+elem[1]],1)
                     except:
                         pass
+    """
     for elem in index:        
         print(elem)
+        """
             
-    print(index)
-    print(val_array)
-    return val_array
+    print("index ",index)
+    print("val array", val_array)
+    return val_array, index
 
 def cortar(R,C,L,H,array):
     shapes=[]
@@ -89,27 +91,68 @@ def cortar(R,C,L,H,array):
                 j=1
         else:
             f=1
-    print(shapes)
+    print("shapes ",shapes)
     return shapes
 
 def greedy_cortes(shapes,pizza,index):
-    cortes=[]
-    for lines in index:
-        
+    corte_pizza=np.zeros_like(pizza)
+    corte_pizza=corte_pizza.tolist()
+    
+    val_2=[(0,1),(1,0),(0,-1),(-1,0)]
+    val_1=[(1,1),(1,-1),(-1,1),(-1,-1)]
+    
+    for indice in index:    
+        for direccion in val_2:
+            #para evitar que se detega el buvcle
+            try:
+                #para eliminar indices negativos
+                if indice[0]+direccion[0]>=0 and indice[1]+direccion[1]>=0: 
+                    pass
+            except:
+                pass
+def buscar_nodos(i,j,pizza,H):
+    direcciones=[(0,-1),(-1,0),(0,1),(1,0)]
+    nodos=[]
+    
+    print("nodo inicio: ",i,j," H ",H)
+    for elem in direcciones:
+        m=i
+        n=j
+        try:
+            if i+elem[0]>=0 and j+elem[1]>=0:
+                for f in range(1,int(H)):
+                    m+=elem[0]
+                    n+=elem[1]
+                    if m>=0 and n>=0 and m<pizza.shape[0] and n<pizza.shape[1]:
+                    #if m+elem[0]>=0 and n+elem[1]>=0 and m+elem[0]<pizza.shape[0] and n+elem[1]<pizza.shape[1] and :
+                        
+                        nodos.append([m,n])
+                        print("imprimiendo f: ",f,"[",m,n,"]",elem)
+        except:
+            print("error externo")
+    print("nodos hallados ",nodos)
+    return nodos
+    
+def nodos():
+    distActual={}
+    while n<6:
+        buscar_nodos
 
-if __name__=='__main__':
-    b=analizar_data("data/a_example.in")
+if __name__=='__main__': 
+    b=analizar_data("data/d_big.in")
     print(b)
-    R,C,L,H,pizza,pi=leer_pizza("data/a_example.in")
+    R,C,L,H,pizza,pi=leer_pizza("data/b_small.in")
     print(R,C,L,H)  
     print(pizza)
     print(pi)
 
     fig,ax=plt.subplots()
     ax.imshow(pi)
-    ax.set_title(f'a_example.in shape is {pi.shape}, max. score {pi.size}\nmin. each ingredients is {L}, max. pizza cells per slice is {H}');
+    #ax.set_title(f'a_example.in shape is {pi.shape}, max. score {pi.size}\nmin. each ingredients is {L}, max. pizza cells per slice is {H}');
     M,T=contar_ingredientes(pi)
     print("tomates= ",T,"mushroom= ",M)
     print("calculo de valores:")
-    pi2=calcular_pizza(M,T,pi)
+    pi2,indices=calcular_pizza(M,T,pi)
     cortar(int(R),int(C),int(L),int(H),pi)
+    #ax.imshow(pi2)
+    buscar_nodos(indices[2][0],indices[2][1],pi,H)
