@@ -112,25 +112,34 @@ def greedy_cortes(shapes,pizza,index):
                 pass
 def buscar_nodos(i,j,pizza,H):
     direcciones=[(0,-1),(-1,0),(0,1),(1,0)]
-    nodos=[]
-    
+    nodos={}
+    beneficio=[]
     print("nodo inicio: ",i,j," H ",H)
     for elem in direcciones:
         m=i
         n=j
+        tom=0
+        mush=1
         try:
             if i+elem[0]>=0 and j+elem[1]>=0:
-                for f in range(1,int(H)):
+                for f in range(1,int(H)+1):
                     m+=elem[0]
                     n+=elem[1]
                     if m>=0 and n>=0 and m<pizza.shape[0] and n<pizza.shape[1]:
-                    #if m+elem[0]>=0 and n+elem[1]>=0 and m+elem[0]<pizza.shape[0] and n+elem[1]<pizza.shape[1] and :
-                        
-                        nodos.append([m,n])
-                        print("imprimiendo f: ",f,"[",m,n,"]",elem)
+                        if pizza[m][n]==1:
+                            tom+=1
+                        else:
+                            mush+=1
+                        nodos[elem]=[[m,n],tom/mush]
+                        print("imprimiendo f: ",f,"[",m,n,"]",elem,"cantidad",tom,mush)
+                #print("fin for **********",list(nodos.values()))
+                #beneficio.append([[m-elem[0],n-elem[1]],tom/mush])
         except:
             print("error externo")
-    print("nodos hallados ",nodos)
+    lista=list(nodos.values())
+    print("nodos hallados ",sorted(list(nodos.values()),key=lambda x:x[1],reverse=True))
+    beneficio=sorted(list(nodos.values()),key=lambda x:x[1],reverse=True)
+    print("corte con mejor beneficio ","[",i,j,"]", beneficio[0][0])
     return nodos
     
 def nodos():
